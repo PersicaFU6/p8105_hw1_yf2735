@@ -1,0 +1,74 @@
+---
+title: "p8105_hw1_yf2735"
+author: "Yujing FU"
+date: "2024-09-18"
+output: github_document
+---
+```{r setup, echo = FALSE, message = FALSE} 
+library(ggplot2)
+library(tidyverse)
+```
+## problem 1
+```{r}
+data("penguins", package = "palmerpenguins")
+```
+The data in this dataset is showed as follows:
+```{r}
+penguins
+```
+The dataset has 344 rows and 8 columns.
+```{r}
+print(paste("row =", nrow(penguins)))
+print(paste("col =", ncol(penguins)))
+```
+The mean of the flipper length is around 200 mm
+```{r}
+print(paste("mean_flipper_length =", mean(penguins$flipper_length_mm, na.rm = TRUE)))
+```
+The scatterplot of flipper_length_mm (y) vs bill_length_mm (x):
+```{r}
+penguins_clean <- na.omit(penguins)
+ggplot(data=penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  labs(title = "Scatterplot of Flipper Length VS Bill Length",
+       x = "bill length (mm)",
+       y = "flipper length (mm)")
+ggsave("scatterplot_flipper_vs_bill_length.png")
+```
+
+## problem 2
+```{r}
+set.seed(111)
+hw1_df = tibble(
+  vec_numeric = rnorm(10, mean = 0, sd = 1),
+  vec_logical = vec_numeric > 0,
+  vec_char = letters[1:10],  
+  vec_factor = factor(rep(1:3, length.out = 10), labels = c("level 1", "level 2", "level 3"))
+)
+hw1_df
+```
+To compute their means:
+```{r}
+set.seed(111)
+mean(pull(hw1_df, vec_numeric))  
+mean(pull(hw1_df, vec_logical))  
+mean(pull(hw1_df, vec_char))
+mean(pull(hw1_df, vec_factor))   
+```
+Summarize:
+
+1) numerical caribles can work
+
+2) logical varibles will be automatically transferred to 0 or 1, therefore the mean can be computed
+
+3) character variables can't work because we can't take the mean of some characters
+
+4) factor variables can't work because they can't be averaged directly
+
+To convert variables from one type to another:
+```{r, results = 'hide'}
+as.numeric(pull(hw1_df, vec_logical))
+as.numeric(pull(hw1_df, vec_char))
+as.numeric(pull(hw1_df, vec_factor))
+```
+
